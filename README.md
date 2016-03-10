@@ -12,18 +12,19 @@ Require the module
 
 ```javascript
 var nodemailer = require('nodemailer');
-var SendinblueTransport = require('nodemailer-sendinblue-transport');
+var sendinBlue = require('nodemailer-sendinblue-transport');
 ```
 
 Create a Nodemailer transporter
 
 ```javascript
-var transporter = nodemailer.createTransport(new SendinblueTransport(options))
+var transporter = nodemailer.createTransport(sendinBlue(options))
 ```
 
 ### Available Options
 
-* **apiKey** - Sendinblue API key
+* **apiKey** - API key
+* **apiUrl** - API url, e. g. <https://api.sendinblue.com/v2.0>
 
 ## License
 
