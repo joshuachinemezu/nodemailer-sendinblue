@@ -1,6 +1,6 @@
 {
   "validateQuoteMarks": "\"",
-  "validateIndentation": 2,
+  "validateIndentation": 4,
   "validateNewlineAfterArrayElements": {
     "maximum": 4,
     "ignoreBrackets": true
