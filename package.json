@@ -26,7 +26,6 @@
       "jscs": "^2.11.0"
   },
   "dependencies": {
-      "lodash": "^4.6.1",
       "addressparser": "^1.0.1",
       "request": "^2.69.0"
   }
