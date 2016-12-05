@@ -4,7 +4,7 @@
   "description": "Nodemailer Transport Module for Sendinblue",
   "main": "lib/nodemailer-sendinblue-transport.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "prepublish": "jscs . && jshint lib/nodemailer-sendinblue-transport.js"
   },
   "repository": {
