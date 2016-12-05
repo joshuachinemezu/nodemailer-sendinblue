@@ -22,12 +22,12 @@
   },
   "homepage": "https://github.com/gotschmarcel/nodemailer-sendinblue-transport#readme",
   "devDependencies": {
-      "jshint": "^2.9.1",
-      "jscs": "^2.11.0"
+    "jscs": "^2.11.0",
+    "jshint": "^2.9.1",
     "mocha": "^3.2.0",
     "nodemailer": "^2.6.4"
   },
   "dependencies": {
-      "addressparser": "^1.0.1"
+    "addressparser": "^1.0.1"
   }
 }
