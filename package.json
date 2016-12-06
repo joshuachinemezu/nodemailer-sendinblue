@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-sendinblue-transport",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Nodemailer Transport Module for Sendinblue",
   "main": "lib/nodemailer-sendinblue-transport.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "nodemailer": "^2.6.4"
   },
   "dependencies": {
-    "addressparser": "^1.0.1"
+    "addressparser": "^1.0.1",
+    "promise": "^7.1.1"
   }
 }
