@@ -28,7 +28,6 @@
     "nodemailer": "^2.6.4"
   },
   "dependencies": {
-    "addressparser": "^1.0.1",
-    "promise": "^7.1.1"
+    "addressparser": "^1.0.1"
   }
 }

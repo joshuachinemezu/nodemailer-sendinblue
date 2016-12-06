@@ -10,5 +10,6 @@
     "latedef": true,
     "noarg": true,
     "nocomma": true,
-    "shadow": true
+    "shadow": true,
+    "predef": ["Promise"]
 }
