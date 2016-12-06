@@ -18,13 +18,16 @@ var sendinBlue = require('nodemailer-sendinblue-transport');
 Create a Nodemailer transporter
 
 ```javascript
-var transporter = nodemailer.createTransport(sendinBlue(options))
+var transporter = nodemailer.createTransport(sendinBlue(apiKey))
 ```
 
-### Available Options
+or with a custom URL
 
-* **apiKey** - API key (required)
-* **apiUrl** - API url, default <https://api.sendinblue.com/v2.0>
+```javascript
+var transporter = nodemailer.createTransport(sendinBlue(apiKey, apiUrl))
+```
+
+> Note: The default API-URL is https://api.sendinblue.com/v2.0
 
 ## License
 
