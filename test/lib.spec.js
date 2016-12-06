@@ -1,4 +1,5 @@
 var assert = require("assert");
+var fs = require("fs");
 var nodemailer = require("nodemailer");
 var sendinblue = require("../lib/nodemailer-sendinblue-transport");
 
@@ -6,12 +7,12 @@ var sendinblue = require("../lib/nodemailer-sendinblue-transport");
 function MockTransport(sb) {
     assert(sb);
     this.sb = sb;
-    this.data = undefined;
 }
 
 MockTransport.prototype.send = function(mail, cb) {
-    this.data = this.sb.transformData(mail.data);
-    cb();
+    this.sb.buildBody(mail).then(function (body) {
+        cb(undefined, body);
+    }).catch(cb);
 };
 
 MockTransport.prototype.reset = function() {
@@ -26,90 +27,170 @@ var transport = nodemailer.createTransport(mock);
 
 
 describe("SendinBlueTransport", function () {
-    describe("#transformData", function () {
-        beforeEach(function () {
-            mock.reset();
-        });
-
-        it("should parse plain 'from' address", function () {
+    describe("#buildBody", function () {
+        it("should parse plain 'from' address", function (done) {
             transport.sendMail({
                 from: "example@test.net"
+            }, function (err, body) {
+               assert.deepStrictEqual(body.from, ["example@test.net", ""]);
+               done(); 
             });
-
-            assert.deepStrictEqual(mock.data.from, ["example@test.net", ""]);
         });
 
-        it("should parse 'from' address with name", function () {
+        it("should parse 'from' address with name", function (done) {
             transport.sendMail({
                 from: '"Doe, Jon" <example@test.net>'
+            }, function (err, body) {
+                assert.deepStrictEqual(body.from, ["example@test.net", "Doe, Jon"]);
+                done(); 
             });
-
-            assert.deepStrictEqual(mock.data.from, ["example@test.net", "Doe, Jon"]);
         });
 
-        it("should parse 'from' address object", function () {
+        it("should parse 'from' address object", function (done) {
             transport.sendMail({
                 from: { name: "Doe, Jon", address: "example@test.net" }
+            }, function (err, body) {
+                assert.deepStrictEqual(body.from, ["example@test.net", "Doe, Jon"]);
+                done(); 
             });
-
-            assert.deepStrictEqual(mock.data.from, ["example@test.net", "Doe, Jon"]);
         });
 
-        it("should parse plain 'to' address", function () {
+        it("should parse plain 'to' address", function (done) {
             transport.sendMail({
                 to: "example@test.net, example2@test.net"
-            });
-
-            assert.deepStrictEqual(mock.data.to, {
-                "example@test.net": "",
-                "example2@test.net": ""
+            }, function (err, body) {
+                assert.deepStrictEqual(body.to, {
+                    "example@test.net": "",
+                    "example2@test.net": ""
+                });
+                done(); 
             });
         });
 
-        it("should parse plain or named 'to' address", function () {
+        it("should parse plain or named 'to' address", function (done) {
             transport.sendMail({
                 to: ["example@test.net", '"Don, Joe" <example2@test.net>']
-            });
-
-            assert.deepStrictEqual(mock.data.to, {
-                "example@test.net": "",
-                "example2@test.net": "Don, Joe"
+            }, function (err, body) {
+                assert.deepStrictEqual(body.to, {
+                    "example@test.net": "",
+                    "example2@test.net": "Don, Joe"
+                });
+                done(); 
             });
         });
 
-        it("should parse object 'to' address", function () {
+        it("should parse object 'to' address", function (done) {
             transport.sendMail({
                 to: {address: "example@test.net", name: "Don Joe"}
+            }, function (err, body) {
+                assert.deepStrictEqual(body.to, {"example@test.net": "Don Joe"});
+                done(); 
             });
-
-            assert.deepStrictEqual(mock.data.to, {"example@test.net": "Don Joe"});
         });
 
-        it("should flatten address groups", function () {
+        it("should flatten address groups", function (done) {
             transport.sendMail({
                 to: "AGroup: example@test.net, example2@test.net"
-            });
-
-            assert.deepStrictEqual(mock.data.to, {
-                "example@test.net": "",
-                "example2@test.net": ""
-            });
+            }, function (err, body) {
+                assert.deepStrictEqual(body.to, {
+                    "example@test.net": "",
+                    "example2@test.net": ""
+                });
+                done(); 
+            });   
         });
 
-        it("should fill out all address fields", function () {
+        it("should fill out all address fields", function (done) {
             transport.sendMail({
                 from: "example@test.net",
                 to: "example@test.net",
                 cc: "example@test.net",
                 bcc: "example@test.net",
                 replyTo: "example@test.net"
+            }, function (err, body) {
+                assert.deepStrictEqual(body.from, ["example@test.net", ""]);
+                assert.deepStrictEqual(body.to, {"example@test.net": ""});
+                assert.deepStrictEqual(body.cc, {"example@test.net": ""});
+                assert.deepStrictEqual(body.bcc, {"example@test.net": ""});
+                assert.deepStrictEqual(body.replyto, ["example@test.net", ""]);
+                done(); 
             });
+        });
 
-            assert.deepStrictEqual(mock.data.from, ["example@test.net", ""]);
-            assert.deepStrictEqual(mock.data.to, {"example@test.net": ""});
-            assert.deepStrictEqual(mock.data.cc, {"example@test.net": ""});
-            assert.deepStrictEqual(mock.data.bcc, {"example@test.net": ""});
-            assert.deepStrictEqual(mock.data.replyto, ["example@test.net", ""]);
+        it("should handle url attachements", function (done) {
+            transport.sendMail({
+                attachments: [{
+                    path: "http://domain.do/file.suffix"
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, ["http://domain.do/file.suffix"]);
+                done(); 
+            });
+        });
+
+        it("should handle generated plain content attachements", function (done) {
+            transport.sendMail({
+                attachments: [{
+                    filename: "a",
+                    content: "Hello World"
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, {"a": "SGVsbG8gV29ybGQ="});
+                done(); 
+            });
+        });
+
+        it("should handle generated plain content attachements with encoding", function (done) {
+            transport.sendMail({
+                attachments: [{
+                    filename: "a",
+                    content: "\xff\xfa\xc3\x4e",
+                    encoding: "binary"
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, {"a": "//rDTg=="});
+                done(); 
+            });
+        });
+
+        it("should handle generated Buffer attachements", function (done) {
+            transport.sendMail({
+                attachments: [{
+                    filename: "a",
+                    content: new Buffer("Hello World")
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, {"a": "SGVsbG8gV29ybGQ="});
+                done(); 
+            });
+        });
+
+        it("should handle generated Readable attachements", function (done) {
+            var testFile = __dirname + "/lib.spec.js";
+
+            transport.sendMail({
+                attachments: [{
+                    filename: "a",
+                    content: fs.createReadStream(testFile)
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, {"a": fs.readFileSync(testFile).toString("base64")});
+                done(); 
+            });
+        });
+
+        it("should handle generated file attachements", function (done) {
+            var testFile = __dirname + "/lib.spec.js";
+
+            transport.sendMail({
+                attachments: [{
+                    filename: "a",
+                    path: testFile
+                }]
+            }, function (err, body) {
+                assert.deepStrictEqual(body.attachment, {"a": fs.readFileSync(testFile).toString("base64")});
+                done(); 
+            });
         });
     });
 });
