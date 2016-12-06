@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-sendinblue-transport",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Nodemailer Transport Module for Sendinblue",
   "main": "lib/nodemailer-sendinblue-transport.js",
   "scripts": {
