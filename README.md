@@ -23,8 +23,8 @@ var transporter = nodemailer.createTransport(sendinBlue(options))
 
 ### Available Options
 
-* **apiKey** - API key
-* **apiUrl** - API url, e. g. <https://api.sendinblue.com/v2.0>
+* **apiKey** - API key (required)
+* **apiUrl** - API url, default <https://api.sendinblue.com/v2.0>
 
 ## License
 
