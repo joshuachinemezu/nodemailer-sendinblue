@@ -83,7 +83,8 @@
   ],
   "requireSpacesInAnonymousFunctionExpression": {
     "beforeOpeningRoundBrace": true,
-    "beforeOpeningCurlyBrace": true
+    "beforeOpeningCurlyBrace": true,
+    "allExcept": ["shorthand"]
   },
   "requireSpaceBeforeBlockStatements": true,
   "requireSpaceBeforeKeywords": [
