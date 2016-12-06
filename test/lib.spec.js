@@ -9,13 +9,13 @@ function MockTransport(sb) {
     this.sb = sb;
 }
 
-MockTransport.prototype.send = function(mail, cb) {
+MockTransport.prototype.send = function (mail, cb) {
     this.sb.buildBody(mail).then(function (body) {
         cb(undefined, body);
     }).catch(cb);
 };
 
-MockTransport.prototype.reset = function() {
+MockTransport.prototype.reset = function () {
     this.data = undefined;
 };
 
@@ -32,17 +32,17 @@ describe("SendinBlueTransport", function () {
             transport.sendMail({
                 from: "example@test.net"
             }, function (err, body) {
-               assert.deepStrictEqual(body.from, ["example@test.net", ""]);
-               done(); 
+                assert.deepStrictEqual(body.from, ["example@test.net", ""]);
+                done();
             });
         });
 
         it("should parse 'from' address with name", function (done) {
             transport.sendMail({
-                from: '"Doe, Jon" <example@test.net>'
+                from: "\"Doe, Jon\" <example@test.net>"
             }, function (err, body) {
                 assert.deepStrictEqual(body.from, ["example@test.net", "Doe, Jon"]);
-                done(); 
+                done();
             });
         });
 
@@ -51,7 +51,7 @@ describe("SendinBlueTransport", function () {
                 from: { name: "Doe, Jon", address: "example@test.net" }
             }, function (err, body) {
                 assert.deepStrictEqual(body.from, ["example@test.net", "Doe, Jon"]);
-                done(); 
+                done();
             });
         });
 
@@ -63,19 +63,19 @@ describe("SendinBlueTransport", function () {
                     "example@test.net": "",
                     "example2@test.net": ""
                 });
-                done(); 
+                done();
             });
         });
 
         it("should parse plain or named 'to' address", function (done) {
             transport.sendMail({
-                to: ["example@test.net", '"Don, Joe" <example2@test.net>']
+                to: ["example@test.net", "\"Don, Joe\" <example2@test.net>"]
             }, function (err, body) {
                 assert.deepStrictEqual(body.to, {
                     "example@test.net": "",
                     "example2@test.net": "Don, Joe"
                 });
-                done(); 
+                done();
             });
         });
 
@@ -84,7 +84,7 @@ describe("SendinBlueTransport", function () {
                 to: {address: "example@test.net", name: "Don Joe"}
             }, function (err, body) {
                 assert.deepStrictEqual(body.to, {"example@test.net": "Don Joe"});
-                done(); 
+                done();
             });
         });
 
@@ -96,8 +96,8 @@ describe("SendinBlueTransport", function () {
                     "example@test.net": "",
                     "example2@test.net": ""
                 });
-                done(); 
-            });   
+                done();
+            });
         });
 
         it("should fill out all address fields", function (done) {
@@ -113,7 +113,7 @@ describe("SendinBlueTransport", function () {
                 assert.deepStrictEqual(body.cc, {"example@test.net": ""});
                 assert.deepStrictEqual(body.bcc, {"example@test.net": ""});
                 assert.deepStrictEqual(body.replyto, ["example@test.net", ""]);
-                done(); 
+                done();
             });
         });
 
@@ -124,7 +124,7 @@ describe("SendinBlueTransport", function () {
                 }]
             }, function (err, body) {
                 assert.deepStrictEqual(body.attachment, ["http://domain.do/file.suffix"]);
-                done(); 
+                done();
             });
         });
 
@@ -135,8 +135,10 @@ describe("SendinBlueTransport", function () {
                     content: "Hello World"
                 }]
             }, function (err, body) {
-                assert.deepStrictEqual(body.attachment, {"a": "SGVsbG8gV29ybGQ="});
-                done(); 
+                assert.deepStrictEqual(body.attachment, {
+                    "a": "SGVsbG8gV29ybGQ="
+                });
+                done();
             });
         });
 
@@ -148,8 +150,10 @@ describe("SendinBlueTransport", function () {
                     encoding: "binary"
                 }]
             }, function (err, body) {
-                assert.deepStrictEqual(body.attachment, {"a": "//rDTg=="});
-                done(); 
+                assert.deepStrictEqual(body.attachment, {
+                    "a": "//rDTg=="
+                });
+                done();
             });
         });
 
@@ -160,8 +164,10 @@ describe("SendinBlueTransport", function () {
                     content: new Buffer("Hello World")
                 }]
             }, function (err, body) {
-                assert.deepStrictEqual(body.attachment, {"a": "SGVsbG8gV29ybGQ="});
-                done(); 
+                assert.deepStrictEqual(body.attachment, {
+                    "a": "SGVsbG8gV29ybGQ="
+                });
+                done();
             });
         });
 
@@ -174,8 +180,10 @@ describe("SendinBlueTransport", function () {
                     content: fs.createReadStream(testFile)
                 }]
             }, function (err, body) {
-                assert.deepStrictEqual(body.attachment, {"a": fs.readFileSync(testFile).toString("base64")});
-                done(); 
+                assert.deepStrictEqual(body.attachment, {
+                    "a": fs.readFileSync(testFile).toString("base64")
+                });
+                done();
             });
         });
 
@@ -188,8 +196,10 @@ describe("SendinBlueTransport", function () {
                     path: testFile
                 }]
             }, function (err, body) {
-                assert.deepStrictEqual(body.attachment, {"a": fs.readFileSync(testFile).toString("base64")});
-                done(); 
+                assert.deepStrictEqual(body.attachment, {
+                    "a": fs.readFileSync(testFile).toString("base64")
+                });
+                done();
             });
         });
     });

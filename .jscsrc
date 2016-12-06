@@ -99,6 +99,5 @@
   },
   "requireSpacesInNamedFunctionExpression": {
     "beforeOpeningCurlyBrace": true
-  },
-  "requireSpacesInsideObjectBrackets": "all"
+  }
 }
