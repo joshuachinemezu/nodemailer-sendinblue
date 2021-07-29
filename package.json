@@ -1,26 +1,26 @@
 {
-  "name": "nodemailer-sendinblue-transport",
+  "name": "nodemailer-sendinblue",
   "version": "1.2.3",
   "description": "Nodemailer Transport Module for Sendinblue",
-  "main": "lib/nodemailer-sendinblue-transport.js",
+  "main": "lib/nodemailer-sendinblue.js",
   "scripts": {
     "test": "mocha",
-    "prepublish": "jscs . && jshint lib/nodemailer-sendinblue-transport.js"
+    "prepublish": "jscs . && jshint lib/nodemailer-sendinblue.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gotschmarcel/nodemailer-sendinblue-transport.git"
+    "url": "git+https://github.com/joshuachinemezu/nodemailer-sendinblue.git"
   },
   "keywords": [
     "nodemailer",
     "sendinblue"
   ],
-  "author": "Marcel Gotsch",
+  "author": "Joshua Chinemezu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gotschmarcel/nodemailer-sendinblue-transport/issues"
+    "url": "https://github.com/joshuachinemezu/nodemailer-sendinblue/issues"
   },
-  "homepage": "https://github.com/gotschmarcel/nodemailer-sendinblue-transport#readme",
+  "homepage": "https://github.com/joshuachinemezu/nodemailer-sendinblue#readme",
   "devDependencies": {
     "jscs": "^2.11.0",
     "jshint": "^2.9.1",
