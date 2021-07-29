@@ -6,13 +6,13 @@ This module applies for [Nodemailer](http://www.nodemailer.com/) v1+ and provide
 
 Install with npm
 
-    npm install nodemailer-sendinblue-transport
+    npm install nodemailer-sendinblue
 
 Require the module
 
 ```javascript
-var nodemailer = require('nodemailer');
-var sendinBlue = require('nodemailer-sendinblue-transport');
+var nodemailer = require('nodemailer')
+var sendinBlue = require('nodemailer-sendinblue')
 ```
 
 Create a Nodemailer transporter
@@ -23,8 +23,8 @@ var transporter = nodemailer.createTransport(sendinBlue(options))
 
 ### Available Options
 
-* **apiKey** - API key (required)
-* **apiUrl** - API url, default <https://api.sendinblue.com/v2.0>
+-   **apiKey** - API key (required)
+-   **apiUrl** - API url, default <https://api.sendinblue.com/v2.0>
 
 ## License
 
